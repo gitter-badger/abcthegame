@@ -530,7 +530,7 @@ onCollision = function( event )--{{{
 		return
 	end
 	
-	if "began" == event.phase then
+	--[[if "began" == event.phase then
 		local o
 		local ot
 		if "player" == event.object1.objectType then
@@ -562,7 +562,7 @@ onCollision = function( event )--{{{
 			o.isVisible = false
 			gameSpecial(ot)
 		end
-	end
+	end]]--
 end--}}}
 
 -- Animates all objects. Also resizes the player by removing and readding it to the physics world.
@@ -648,20 +648,7 @@ end
 function moverIncB( )
 	
 	
-	--[[if PosIniB==1 then
-		PosInix= deviceContentWidth-20
-		PosIniy= math.random(1,display.contentHeight)
-	elseif PosIniB==2 then 
-		PosInix= 20
-		PosIniy= math.random(1,display.contentHeight)
-	elseif PosIniB==3 then
-		PosInix= math.random(1,display.contentWidth)
-		PosIniy= deviceContentHeight -20
-	elseif PosIniB==4 then
-		PosInix= math.random(1,display.contentWidth)
-		PosIniy= deviceContentHeight -20
-	end
-	]]--
+	
 	PosInix= 100
 	PosIniy= 50
 
@@ -692,45 +679,71 @@ function moverIncB( )
 	return llego
 end
 function MovB( )
-	if (not(playerA.x ==playerB.x +100))and (playerB.x-playerA.x<=100 or playerB.x-playerA.x >=-100) then
+	print("dife"..playerA.x-playerB.x )
+	if (playerA.x-playerB.x<=100  and playerA.x-playerB.x>=-100) and (playerA.y-playerB.y<=100  and playerA.y-playerB.y>=-100)  then
+		if (not(playerA.x ==playerB.x )) then
 
-		if playerA.x>playerB.x then
-			playerB.x=playerB.x+1
-		elseif playerA.x<playerB.x then
-			playerB.x=playerB.x-1
-		end
-	end
-	if  (not( playerA.y==playerB.y +100))and (playerB.y-playerA.y<=100 or playerB.y-playerA.y>=-100) then
-
-			if playerA.y>playerB.y then
-				playerB.y=playerB.y+1
-			elseif playerA.y<playerB.y then
-				playerB.y=playerB.y-1
+			print( "sigoA" )
+			if playerA.x>playerB.x then
+				playerB.x=playerB.x+1
+			elseif playerA.x<playerB.x then
+				playerB.x=playerB.x-1
 			end
+		end
+		if  (not( playerA.y==playerB.y )) then
+
+				if playerA.y>playerB.y then
+					playerB.y=playerB.y+1
+				elseif playerA.y<playerB.y then
+					playerB.y=playerB.y-1
+				end
+		end
+	else
+		if (not(playerA.c ==playerB.x))  then
+					print( "sigoC" )
+						if playerC.x>playerB.x then
+							playerB.x=playerB.x+1
+						end
+						if playerC.x<playerB.x then
+							playerB.x=playerB.x-1
+						end
+					
+					end
+
+
+					if  (not( playerC.y==playerB.y ))  then
+
+						if playerC.y>playerB.y then
+							playerB.y=playerB.y+1
+						end
+						if playerC.y<playerB.y then
+							playerB.y=playerB.y-1
+						end
+					end
+		
 	end
+	--[[if (playerA.x-playerB.x<=.1 or playerA.x-playerB.x >-.1) and (playerA.y-playerB.y<=.1 or playerA.y-playerB.y>=-.1)then
+		if (not(playerA.x ==playerB.x )) then
+
+			print( "sigoA" )
+			if playerA.x>playerB.x then
+				playerB.x=playerB.x+1
+			elseif playerA.x<playerB.x then
+				playerB.x=playerB.x-1
+			end
+		end
+		if  (not( playerA.y==playerB.y )) then
+
+				if playerA.y>playerB.y then
+					playerB.y=playerB.y+1
+				elseif playerA.y<playerB.y then
+					playerB.y=playerB.y-1
+				end
+		end
 	
-	if (not(playerA.c ==playerB.x))  then
-
-		if playerC.x>playerB.x then
-			playerB.x=playerB.x+1
-		end
-		if playerC.x<playerB.x then
-			playerB.x=playerB.x-1
-		end
-	end
-
-
-
-	if  (not( playerC.y==playerB.y ))  then
-
-		if playerC.y>playerB.y then
-			playerB.y=playerB.y+1
-		end
-		if playerC.y<playerB.y then
-			playerB.y=playerB.y-1
-		end
-	end
-
+	else]]--
+		
+	
 
 	-- body
 end
