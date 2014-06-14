@@ -263,6 +263,10 @@ createMenu = function( )--{{{
 		elseif "ended" == event.phase and startButton.isFocus then
 			startButton.isFocus = false
 			startGame( )
+			playerB.isVisible=true
+			playerC.isVisible=true
+			--PosIniB=math.random(1,4)
+
 		end
 
 		-- Return true if touch event has been handled.
@@ -624,7 +628,112 @@ animate = function( event )--{{{
 	end
 
 end--}}}
+local llego=false
+animateB=function ( event )
 
+	if llego==false then
+	moverIncB( )
+	--print( playerB.x.. " y " ..playerB.y)
+
+	end
+	if llego==true then
+ 	MovB( )
+
+	end
+
+
+	
+end
+
+function moverIncB( )
+	
+	
+	--[[if PosIniB==1 then
+		PosInix= deviceContentWidth-20
+		PosIniy= math.random(1,display.contentHeight)
+	elseif PosIniB==2 then 
+		PosInix= 20
+		PosIniy= math.random(1,display.contentHeight)
+	elseif PosIniB==3 then
+		PosInix= math.random(1,display.contentWidth)
+		PosIniy= deviceContentHeight -20
+	elseif PosIniB==4 then
+		PosInix= math.random(1,display.contentWidth)
+		PosIniy= deviceContentHeight -20
+	end
+	]]--
+	PosInix= 100
+	PosIniy= 50
+
+
+	if( playerB.x>PosInix+10 and  playerB.x<PosInix +20 )or  (playerB.x<PosInix-10 and  playerB.x>PosInix -20 ) and ( playerB.y>PosIniy+10 and  playerB.y<PosIniy +20 )or  (playerB.y<PosIniy-10 and  playerB.y>PosIniy-20 ) then
+	llego=true
+	end
+	if playerB.x>=PosInix then
+			playerB.x=playerB.x-1
+	end
+	if playerB.x<=PosInix then
+
+			playerB.x=playerB.x+10
+		-- body
+	end
+	
+
+	if playerB.y>=PosIniy then
+	
+			playerB.y=playerB.y-1
+	end
+	if playerB.y<=PosIniy then
+
+			playerB.y=playerB.y+1
+
+		-- body
+	end
+	return llego
+end
+function MovB( )
+	if (not(playerA.x ==playerB.x +100))and (playerB.x-playerA.x<=100 or playerB.x-playerA.x >=-100) then
+
+		if playerA.x>playerB.x then
+			playerB.x=playerB.x+1
+		elseif playerA.x<playerB.x then
+			playerB.x=playerB.x-1
+		end
+	end
+	if  (not( playerA.y==playerB.y +100))and (playerB.y-playerA.y<=100 or playerB.y-playerA.y>=-100) then
+
+			if playerA.y>playerB.y then
+				playerB.y=playerB.y+1
+			elseif playerA.y<playerB.y then
+				playerB.y=playerB.y-1
+			end
+	end
+	
+	if (not(playerA.c ==playerB.x))  then
+
+		if playerC.x>playerB.x then
+			playerB.x=playerB.x+1
+		end
+		if playerC.x<playerB.x then
+			playerB.x=playerB.x-1
+		end
+	end
+
+
+
+	if  (not( playerC.y==playerB.y ))  then
+
+		if playerC.y>playerB.y then
+			playerB.y=playerB.y+1
+		end
+		if playerC.y<playerB.y then
+			playerB.y=playerB.y-1
+		end
+	end
+
+
+	-- body
+end
 --------------- END FUNCTIONS ---------------
 
 -- Hide the status bar.
@@ -691,6 +800,7 @@ Runtime:addEventListener ( "collision", onCollision )
 
 -- Start the animations of all moving objects - except the player object.
 Runtime:addEventListener( "enterFrame", animate );
+Runtime:addEventListener( "enterFrame", animateB );
 
 spawn( "food", 0, randomSpeed() )
 spawn( "food", 0, -randomSpeed() )
