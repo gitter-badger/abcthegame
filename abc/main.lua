@@ -106,7 +106,7 @@ createPlayerA = function( x, y, radius, rotation, visible )--{{{
 	--  Player is a black square
 	local p = display.newCircle(x, y, radius)
 	-- p:setReferencePoint(display.CenterReferencePoint)
-	p:setFillColor(0, 0, 1)
+	p:setFillColor(0.3, 0.6, 0.9)
 	p.isBullet = true
 	p.objectType = "player"
 	physics.addBody ( p, "dynamic", playerBodyElement )
@@ -126,7 +126,7 @@ createPlayerB = function( x, y, radius, rotation, visible )--{{{
 	-- local p = display.newRect(x, y, width, height)
 	local p = display.newCircle( x, y, radius )
 	-- p:setReferencePoint(display.CenterReferencePoint)
-	p:setFillColor(1, 0, 0)
+	p:setFillColor(0.5, 0.3, 0.5)
 	p.isBullet = true
 	p.objectType = "player"
 	physics.addBody ( p, "dynamic", playerBodyElement )
@@ -145,7 +145,7 @@ createPlayerC = function( x, y, radius, rotation, visible )--{{{
 	--  Player is a black square
 	local p = display.newCircle( x, y, radius )
 	-- p:setReferencePoint(display.CenterReferencePoint)
-	p:setFillColor(0, 1, 0)
+	p:setFillColor( 0.5, 0.5, 0.5)
 	p.isBullet = true
 	p.objectType = "player"
 	physics.addBody ( p, "dynamic", playerBodyElement )
@@ -212,11 +212,13 @@ startGame = function( )--{{{
 	playerB.isVisible = false
 	playerC.isVisible = false
 
-	scoreLabel.isVisible = true
+	scoreLabel.isVisible = false
 	for _, object in pairs ( objects ) do
 		-- Remove all objects from scene to force a re-spawn
 		object.isVisible = false
 	end
+
+	startButton.isVisible = false
 end--}}}
 
 -- Creates a menu and returns a handle to it. 
@@ -224,23 +226,17 @@ createMenu = function( )--{{{
 	local menu = display.newGroup ( )
 	local menuBackground = display.newRect( menu, deviceContentWidth / 2, deviceContentHeight / 2, deviceContentWidth, deviceContentHeight )
 	-- display.newRect( left, top, width, height )
-	menuBackground:setFillColor ( 0, 0.6, 0 )
-	menuBackground.alpha = 0.3
+	menuBackground:setFillColor ( 1, 1, 1 )
+	menuBackground.alpha = 1
 
-	local title = display.newText( menu, "ABC", 0, 0, native.systemFontBold, 75 )
-	title.x = display.contentWidth / 2
-	title.y = display.contentHeight / 2 - 50 
-	title:setTextColor( 255, 0, 0 )
+	-- local title = display.newText( menu, "ABC", 0, 0, native.systemFontBold, 75 )
+	-- title.x = display.contentWidth / 2
+	-- title.y = display.contentHeight / 2 - 50 
+	-- title:setTextColor( 255, 0, 0 )
 
-	local startButton = display.newText(  menu, "start", 0, 0, native.systemFontBold, 60 )
+	startButton = display.newImage("../Assets/img/start.png")
 	startButton.x = display.contentWidth / 2
-	startButton.y = display.contentHeight / 2 + 10 
-	startButton:setTextColor( 0, 0, 0 )
-
-	local instructionsButton = display.newText( menu, "instructions", 0, 0, native.systemFontBold, 45 )
-	instructionsButton.x = display.viewableContentWidth / 2
-	instructionsButton.y = display.viewableContentHeight / 2 + 135
-	instructionsButton:setTextColor( 0, 0, 0 )
+	startButton.y = display.contentHeight / 2
 
 	-- local steps = display.newText( menu, "Try to avoid B\nTry to help C.\nSometimes you must fight with B to survive.\nTry to DONT KILL B.\nDon't let B DIE.", 0, 0, 480, 250, native.systemFont, 35 )
 	-- steps.x = deviceContentWidth / 2
@@ -248,14 +244,14 @@ createMenu = function( )--{{{
 	-- steps:setTextColor( 0, 0, 0 )
 
 	-- Animate the start button. Scale up and down.
-	local function startButtonAnimation( )
-		local scaleUp = function( )
-			startButtonTween = transition.to( startButton, { xScale=1, yScale=1, onComplete=startButtonAnimation } )
-		end
+	-- local function startButtonAnimation( )
+	-- 	local scaleUp = function( )
+	-- 		startButtonTween = transition.to( startButton, { xScale=1, yScale=1, onComplete=startButtonAnimation } )
+	-- 	end
 			
-		startButtonTween = transition.to( startButton, { xScale=0.9, yScale=0.9, onComplete=scaleUp } )
-	end
-	startButtonAnimation( )
+	-- 	startButtonTween = transition.to( startButton, { xScale=0.9, yScale=0.9, onComplete=scaleUp } )
+	-- end
+	-- startButtonAnimation( )
 
 	local function onStartButtonTouch(event)
 		if "began" == event.phase then
@@ -266,9 +262,8 @@ createMenu = function( )--{{{
 			playerB.isVisible=true
 			playerC.isVisible=true
 			--PosIniB=math.random(1,4)
-
+			startButton.isVisible = false
 		end
-
 		-- Return true if touch event has been handled.
 		return true
 	end
@@ -285,7 +280,7 @@ createMenu = function( )--{{{
 		-- Return true if touch event has been handled.
 		return true
 	end
-	instructionsButton:addEventListener ( "touch", onInstructionsButtonTouch )
+	-- instructionsButton:addEventListener ( "touch", onInstructionsButtonTouch )
 
 	-- local lastScoreLabel = display.newText( menu, "score " .. score, 0, 0, native.systemFont, 15 )
 	-- lastScoreLabel.x = display.viewableContentWidth / 2
@@ -639,6 +634,22 @@ animateB=function ( event )
 	if llego==true then
  	MovB( )
 
+	end	
+end
+
+
+local llegoC=false
+animateC=function ( event )
+
+	if llegoC==false then
+		moverIncC( )
+	--print( playerB.x.. " y " ..playerB.y)
+	print("moverIncC")
+
+	end
+	if llegoC==true then
+ 		MovC( )
+ 		print( "MovC" )
 	end
 
 
@@ -680,7 +691,7 @@ function moverIncB( )
 end
 function MovB( )
 	print("dife"..playerA.x-playerB.x )
-	if (playerA.x-playerB.x<=100  and playerA.x-playerB.x>=-100) and (playerA.y-playerB.y<=100  and playerA.y-playerB.y>=-100)  then
+	if (playerA.x-playerB.x<=200  and playerA.x-playerB.x>=-200) and (playerA.y-playerB.y<=200  and playerA.y-playerB.y>=-200)  then
 		if (not(playerA.x ==playerB.x )) then
 
 			print( "sigoA" )
@@ -747,6 +758,65 @@ function MovB( )
 
 	-- body
 end
+
+
+
+function moverIncC( )
+	PosInix= deviceContentWidth - 100
+	PosIniy= deviceContentHeight - 100
+
+	if( playerC.x<PosInix-10 and  playerC.x>PosInix -20 )or  (playerC.x>PosInix+10 and  playerC.x<PosInix+20 ) and ( playerC.y<PosIniy-10 and  playerC.y>PosIniy -20 )or  (playerC.y>PosIniy+10 and  playerC.y<PosIniy+20 ) then
+		llegoC=true
+	end
+	if playerC.x<=PosInix then
+			playerC.x=playerC.x+1
+	end
+	if playerC.x>=PosInix then
+			playerC.x=playerC.x-10
+	end
+	
+
+	if playerC.y<=PosIniy then
+			playerC.y=playerC.y+1
+	end
+	if playerC.y>=PosIniy then
+			playerC.y=playerC.y-1
+	end
+	return llegoC
+end
+function MovC( )
+	print("dife"..playerA.x-playerB.x )
+	if (playerC.x - playerB.x <= 200 and playerC.x - playerB.x >= -200) and (playerC.y-playerB.y <=200 and playerC.y-playerB.y >= -200)  then
+		if (not(playerC.x == playerB.x)) then
+			print( "alejate de B" )
+			if playerC.x > playerB.x then
+				playerC.x = playerC.x + 1
+			elseif playerC.x < playerB.x then
+				playerC.x = playerC.x - 1
+			end
+		end
+		if  (not( playerC.y == playerB.y )) then
+				if playerC.y > playerC.y then
+					playerC.y = playerC.y+1
+				elseif playerC.y < playerB.y then
+					playerC.y = playerC.y-1
+				end
+		end
+		-- if (playerC.x == deviceContentWidth or playerC.y == deviceContentHeight) then
+		-- 		playerC.x = playerC.x - 1
+		-- 		playerC.y = playerC.y - 1
+		-- 	elseif (playerC.x == 0 or playerC.y == 0) then
+		-- 		playerC.x = playerC.x + 1
+		-- 		playerC.y = playerC.y + 1
+		-- 	end
+	-- 		print( "Muevete C" )
+			
+	end
+
+
+end
+
+
 --------------- END FUNCTIONS ---------------
 
 -- Hide the status bar.
@@ -814,15 +884,17 @@ Runtime:addEventListener ( "collision", onCollision )
 -- Start the animations of all moving objects - except the player object.
 Runtime:addEventListener( "enterFrame", animate );
 Runtime:addEventListener( "enterFrame", animateB );
+Runtime:addEventListener( "enterFrame", animateC );
 
-spawn( "food", 0, randomSpeed() )
-spawn( "food", 0, -randomSpeed() )
-spawn( "food", randomSpeed(), 0 )
-spawn( "food", -randomSpeed(), 0 )
-spawn( "enemy", 0, randomSpeed() )
-spawn( "enemy", 0, -randomSpeed() )
-spawn( "enemy", randomSpeed(), 0 )
-spawn( "enemy", -randomSpeed(), 0 )
+
+-- spawn( "food", 0, randomSpeed() )
+-- spawn( "food", 0, -randomSpeed() )
+-- spawn( "food", randomSpeed(), 0 )
+-- spawn( "food", -randomSpeed(), 0 )
+-- spawn( "enemy", 0, randomSpeed() )
+-- spawn( "enemy", 0, -randomSpeed() )
+-- spawn( "enemy", randomSpeed(), 0 )
+-- spawn( "enemy", -randomSpeed(), 0 )
 spawn( "reward", randomSpeed(), 0 )
 
 -- This is the actual entry point. The start.
